@@ -11,7 +11,28 @@ class App extends React.Component {
             board: new Array(HEIGHT).fill(new Array(WIDTH).fill(false)),
             running: false,
             tickRate: 1000,
+            worldWidth: 0,
+            worldHeight: 0,
         };
+    }
+
+    componentDidMount() {
+        this.setWorld();
+        window.addEventListener("resize", () => {
+            this.setWorld();
+        });
+    }
+
+    setWorld = () => {
+        let width = window.innerWidth, height = window.innerHeight;
+        let worldWidth = Math.floor(width * 0.8 / 10);
+        let worldHeight = Math.floor(height * 0.6 / 10);
+        this.setState({
+            board: new Array(worldHeight).fill(new Array(worldWidth).fill(false)),
+            worldWidth: worldWidth,
+            worldHeight: worldHeight,
+            running: false,
+        });
     }
 
     setup = (i, j) => {
@@ -28,8 +49,10 @@ class App extends React.Component {
         const directions = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
         let neighboringCount = 0;
         directions.forEach((direction) => {
-            let neighborX = x + direction[0], neighborY = y + direction[1];
-            if ((neighborX < WIDTH && neighborX >= 0 && neighborY < HEIGHT && neighborY >= 0) && this.state.board[neighborY][neighborX]) {
+            let neighborX = (x + direction[0]), neighborY = (y + direction[1]);
+            neighborX = ((neighborX % this.state.worldWidth) + this.state.worldWidth) % this.state.worldWidth;
+            neighborY = ((neighborY % this.state.worldHeight) + this.state.worldHeight) % this.state.worldHeight;
+            if (this.state.board[neighborY][neighborX]) {
                 neighboringCount = neighboringCount + 1;
             }
         });
@@ -54,7 +77,7 @@ class App extends React.Component {
     }
 
     refresh = () => {
-        this.setState({board: new Array(HEIGHT).fill(new Array(WIDTH).fill(false))});
+        this.setState({board: new Array(this.state.worldHeight).fill(new Array(this.state.worldWidth).fill(false))});
     }
 
     randomize = () => {
@@ -100,8 +123,6 @@ class App extends React.Component {
                     >
                         {this.state.running ? "Stop" : "Start"}
                     </button>
-                </div>
-                <div className="controls">
                     <button
                         disabled={this.state.running}
                         onClick={(e) => {
@@ -125,11 +146,21 @@ class App extends React.Component {
                         <input
                             id="tick-rate"
                             type="range"
-                            min="50" max="3000"
+                            min="10" max="3000"
                             value={this.state.tickRate}
                             onChange={(e) => {this.setState({tickRate: e.target.value})}}
                             step="10"
                         />
+                    </div>
+                </div>
+                <div className="templates">
+                    <div className="about">
+                        <h1>What is Conway's Game of Life</h1>
+                        <p>
+                            Simply put, it's a game that shows that complex patterns can emerge when an defined initial
+                            state is constrained by a simple set of rules. For a real explanation, visit the
+                            game's <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Wikipedia page</a>.
+                        </p>
                     </div>
                 </div>
             </div>

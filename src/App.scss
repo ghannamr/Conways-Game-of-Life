@@ -1,17 +1,19 @@
 #root {
-  min-height: 100vh;
+  min-height: 110vh;
+  width: 100%;
   background: #282a36;
 }
 
 .App {
   min-height: 100vh;
+  width: 100%;
   .board-container {
-    padding-top: 100px;
+    padding-top: 10px;
     text-align: center;
     min-height: 50vh;
     .board {
       display: inline-block;
-      border: #f1fa8c solid 2px;
+      border: #ffa94d solid 2px;
       .row {
         display: flex;
         .box {
@@ -25,10 +27,10 @@
       }
     }
   }
-  .start-stop, .controls {
+  .start-stop {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    margin: 20px 0;
     font-weight: bold;
     button {
       font-weight: bold;
@@ -38,9 +40,8 @@
       border-style: none;
       color: #282a36;
       border-radius: 5px;
+      min-width: 100px;
       &.main {
-        padding: 30px 20px;
-        font-size: 20px;
         color: #282a36;
       }
     }
@@ -144,6 +145,33 @@
       }
     }
   }
+  .templates {
+    display: flex;
+    overflow: hidden;
+    margin: 20px 50px;
+    .about {
+      color: #f8f8f2;
+      width: 200px;
+      margin-right: 20px;
+      h1 {
+        font-size: 20px;
+      }
+      p {
+        font-size: 14px;
+        a {
+          text-decoration: none;
+          color: #ffa94d;
+        }
+      }
+    }
+  }
 }
 
+@media all and (max-width: 1200px) {
+  .App {
+    .start-stop {
+      flex-wrap: wrap;
+    }
+  }
+}
 
